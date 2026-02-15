@@ -19,7 +19,7 @@ public class PaymentService {
     private final IdempotencyService idempotencyService;
 
     public PaymentResponse processPayment(PaymentRequest paymentRequest, String idempotencyKey) throws InterruptedException {
-        var response = createPaymentRequest(paymentRequest);
+        var response = createPaymentResponse(paymentRequest);
         var idempotencyRecord = createIdempotencyRecord(paymentRequest, idempotencyKey, response);
 
         idempotencyService.save(idempotencyRecord);
@@ -30,10 +30,11 @@ public class PaymentService {
         idempotencyRecord.setCompletedAt(LocalDateTime.now());
         idempotencyService.update(idempotencyRecord);
 
+
         return response;
     }
 
-    private PaymentResponse createPaymentRequest(PaymentRequest paymentRequest) {
+    private PaymentResponse createPaymentResponse(PaymentRequest paymentRequest) {
         return PaymentResponse.builder()
                 .message("Payment Successful")
                 .status("success")

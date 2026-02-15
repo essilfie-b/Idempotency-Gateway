@@ -1,6 +1,7 @@
 package com.finsafe.idempotency.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finsafe.idempotency.dtos.IdempotencyRecord;
 import com.finsafe.idempotency.dtos.Status;
 import com.finsafe.idempotency.exceptions.IdempotencyException;
 import com.finsafe.idempotency.services.IdempotencyService;
@@ -23,10 +24,18 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
 
         if (idempotencyKey == null) throw new IdempotencyException("Idempotency-Key header is null");
 
-        var idempotencyRecordOpt = idempotencyService.getByIdempotencyKey(idempotencyKey);
+        var placeholderRecord = IdempotencyRecord.builder()
+                .idempotencyKey(idempotencyKey)
+                .status(Status.IN_PROGRESS)
+                .build();
 
-        if (idempotencyRecordOpt.isPresent()) {
-            var idempotencyRecord =  idempotencyRecordOpt.get();
+        boolean reserved = idempotencyService.save(placeholderRecord);
+
+        if (reserved)
+            return true;
+        else {
+            var idempotencyRecord = idempotencyService.getByIdempotencyKey(idempotencyKey)
+                    .orElseThrow(() -> new IdempotencyException("Idempotency record vanished unexpectedly"));
 
             if (idempotencyRecord.getStatus() == Status.COMPLETED) {
                 response.setContentType("application/json");
@@ -38,7 +47,5 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
             throw new IdempotencyException("Request with this idempotency key is already being processed");
         }
 
-
-        return true;
     }
 }

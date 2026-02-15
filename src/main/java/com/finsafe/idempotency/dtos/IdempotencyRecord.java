@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class IdempotencyRecord {
     private String idempotencyKey;
     private Status status;
