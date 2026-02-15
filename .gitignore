@@ -31,4 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
-/REQUIREMENTS_ANALYSIS.md
+/REQ_ANA.md
+/DESC.md
