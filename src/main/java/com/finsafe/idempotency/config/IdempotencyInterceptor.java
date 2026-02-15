@@ -44,6 +44,13 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
                 return false;
             }
 
+            if (idempotencyRecord.getStatus() == Status.FAILED) {
+                response.setContentType("application/json");
+                response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+                response.getWriter().write(objectMapper.writeValueAsString(idempotencyRecord.getResponse()));
+                return false;
+            }
+
             throw new IdempotencyException("Request with this idempotency key is already being processed");
         }
 
