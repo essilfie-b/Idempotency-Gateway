@@ -2,6 +2,7 @@ package com.finsafe.idempotency.controllers;
 
 import com.finsafe.idempotency.dtos.ErrorResponse;
 import com.finsafe.idempotency.exceptions.IdempotencyException;
+import com.finsafe.idempotency.exceptions.PaymentProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,6 +30,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse<String>> handleIdempotencyKeyMismatch(
             IdempotencyException ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorResponse<>("Idempotency error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(PaymentProcessingException.class)
+    public ResponseEntity<ErrorResponse<String>> handlePaymentProcessingException(
+            PaymentProcessingException ex
+    ) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(new ErrorResponse<>("PAYMENT_PROCESSING_ERROR", ex.getMessage()));
     }
 
 }

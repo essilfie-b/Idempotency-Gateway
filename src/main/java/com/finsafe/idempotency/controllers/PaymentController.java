@@ -1,9 +1,9 @@
 package com.finsafe.idempotency.controllers;
 
 
-import com.finsafe.idempotency.services.PaymentService;
 import com.finsafe.idempotency.dtos.PaymentRequest;
 import com.finsafe.idempotency.dtos.PaymentResponse;
+import com.finsafe.idempotency.services.PaymentService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ public class PaymentController {
     @PostMapping("/process-payment")
     public ResponseEntity<PaymentResponse> processPayment(
             @RequestBody @Valid PaymentRequest paymentRequest,
-            @RequestHeader("Idempotency-Key") String idempotencyKey) throws InterruptedException {
+            @RequestHeader("Idempotency-Key") String idempotencyKey) {
         return ResponseEntity.status(HttpStatus.CREATED).body(paymentService.processPayment(paymentRequest, idempotencyKey));
     }
 }
