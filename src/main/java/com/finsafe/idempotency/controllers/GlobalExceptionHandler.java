@@ -1,6 +1,7 @@
 package com.finsafe.idempotency.controllers;
 
 import com.finsafe.idempotency.dtos.ErrorResponse;
+import com.finsafe.idempotency.exceptions.IdempotencyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,14 +17,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse<List<String>>> handleValidationException(
             MethodArgumentNotValidException ex) {
 
-        var errorResponse = new ErrorResponse<List<String>>();
-        errorResponse.setMessage("Validation Failed");
-        errorResponse.setError(ex.getBindingResult().getFieldErrors()
+        var fieldErrors = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(err -> err.getField() + ": " + err.getDefaultMessage())
-                .toList());
+                .toList();
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse<>("Validation Failed", fieldErrors));
+    }
+
+    @ExceptionHandler(IdempotencyException.class)
+    public ResponseEntity<ErrorResponse<String>> handleIdempotencyKeyMismatch(
+            IdempotencyException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorResponse<>("Idempotency error", ex.getMessage()));
     }
 
 }

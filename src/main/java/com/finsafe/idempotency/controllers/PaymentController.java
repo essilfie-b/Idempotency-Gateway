@@ -20,7 +20,8 @@ public class PaymentController {
 
     @PostMapping("/process-payment")
     public ResponseEntity<PaymentResponse> processPayment(
-            @RequestBody @Valid PaymentRequest paymentRequest) throws InterruptedException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(paymentService.processPayment(paymentRequest));
+            @RequestBody @Valid PaymentRequest paymentRequest,
+            @RequestHeader("Idempotency-Key") String idempotencyKey) throws InterruptedException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(paymentService.processPayment(paymentRequest, idempotencyKey));
     }
 }
