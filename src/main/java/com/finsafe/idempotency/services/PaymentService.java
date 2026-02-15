@@ -1,5 +1,7 @@
-package com.finsafe.idempotency;
+package com.finsafe.idempotency.services;
 
+import com.finsafe.idempotency.dtos.PaymentRequest;
+import com.finsafe.idempotency.dtos.PaymentResponse;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 

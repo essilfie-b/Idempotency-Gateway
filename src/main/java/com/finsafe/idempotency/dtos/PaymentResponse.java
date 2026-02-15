@@ -1,4 +1,4 @@
-package com.finsafe.idempotency;
+package com.finsafe.idempotency.dtos;
 
 import lombok.Builder;
 

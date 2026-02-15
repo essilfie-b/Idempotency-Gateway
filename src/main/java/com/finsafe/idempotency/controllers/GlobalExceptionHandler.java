@@ -1,5 +1,6 @@
-package com.finsafe.idempotency;
+package com.finsafe.idempotency.controllers;
 
+import com.finsafe.idempotency.dtos.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
