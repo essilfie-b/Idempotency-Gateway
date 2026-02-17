@@ -1,3 +1,10 @@
 spring:
   application:
     name: idempotency
+
+idempotency:
+  ttl:
+    completed-records-hours: 24
+    in-progress-minutes: 10
+  cleanup:
+    schedule-cron: "0 */5 * * * *"
