@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class IdempotencyRecord {
     private String idempotencyKey;
     private Status status;
-    private PaymentRequest requestBody;
+    private String requestBodyHash;
     private PaymentResponse response;
     private LocalDateTime createdAt;
     private LocalDateTime completedAt;

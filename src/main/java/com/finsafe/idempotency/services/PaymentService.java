@@ -29,7 +29,6 @@ public class PaymentService {
 
             idempotencyRecord.setResponse(response);
             idempotencyRecord.setStatus(COMPLETED);
-            idempotencyRecord.setRequestBody(paymentRequest);
             idempotencyRecord.setCompletedAt(LocalDateTime.now());
             idempotencyService.update(idempotencyRecord);
 

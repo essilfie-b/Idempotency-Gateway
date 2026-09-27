@@ -61,8 +61,8 @@ public class IdempotencyService {
 
         if (idempotencyRecord.getStatus() == Status.COMPLETED || idempotencyRecord.getStatus() == Status.FAILED) {
             if (idempotencyRecord.getCompletedAt() == null) return false;
-            long hoursElapsed = java.time.Duration.between(idempotencyRecord.getCompletedAt(), now).toHours();
-            return hoursElapsed > properties.getTtl().getCompletedRecordsHours();
+            long secondsElapsed = java.time.Duration.between(idempotencyRecord.getCompletedAt(), now).toSeconds();
+            return secondsElapsed > properties.getTtl().getCompletedRecordsSeconds();
         }
 
         return false;

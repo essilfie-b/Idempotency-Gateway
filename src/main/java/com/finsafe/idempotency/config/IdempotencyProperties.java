@@ -17,7 +17,7 @@ public class IdempotencyProperties {
     @Getter
     @Setter
     public static class Ttl {
-        private long completedRecordsHours = 24;
+        private long completedRecordsSeconds = 86400; // 24 hours default
         private long inProgressMinutes = 10;
     }
 
